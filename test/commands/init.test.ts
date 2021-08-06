@@ -1,8 +1,8 @@
 import {expect, test} from '@oclif/test';
 
-describe('[hello] command ', () => {
+describe('[init] command ', () => {
     test.stdout()
-        .command(['hello'])
+        .command(['init'])
         .it('prints default greetings', ctx => {
             expect(ctx.stdout).to.contain('Hello, World!');
         });

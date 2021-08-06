@@ -1,7 +1,7 @@
-import chalk from 'chalk';
+import chalk from 'chalk'
 
 export const throwError = (error: string) => {
-    throw new Error(chalk.red(error));
-};
+  throw new Error(chalk.red(error))
+}
 
-export * from './fs';
+export * from './fs'

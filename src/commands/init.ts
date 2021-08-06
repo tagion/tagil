@@ -9,7 +9,7 @@ import {PromptMessages, UserMessages} from '../constants';
 
 import Install from './install';
 
-export interface IQuestion {
+export interface Question {
     type: string;
     name: string;
     message?: string;
@@ -20,7 +20,7 @@ export default class Init extends Command {
 
     static description = 'Command for laboratory initialization. Installing Maker and desirable Tagion modules.';
 
-    static examples = [`$ tagil init -l=laba`, `$ tagil init laba`];
+    static examples = ['$ tagil init -l=laba', '$ tagil init laba'];
 
     static args = [
         {
@@ -63,6 +63,8 @@ export default class Init extends Command {
             }
 
             createFolder(this.laboratory);
+
+            this.log(`Go to ${chalk.cyanBright(this.laboratory)}`);
             process.chdir(this.laboratory);
 
             await this.install();

@@ -3,10 +3,6 @@ import {Http} from '../models/http';
 import {GITHUB_TOKEN, GitApi} from '../constants';
 
 class Git extends Http {
-    constructor() {
-        super();
-    }
-
     token = GITHUB_TOKEN;
 
     headers = {

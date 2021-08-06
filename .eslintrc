@@ -1,6 +1,21 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ]
+    "extends": ["oclif", "oclif-typescript"],
+    "globals": {
+        "envVariables": true
+    },
+    "rules": {
+        "@typescript-eslint/no-unused-vars": ["error", {"ignoreRestSiblings": true}],
+        "semi": 0,
+        "indent": 0,
+        "comma-dangle": 0,
+        "no-console": 0
+    },
+    "overrides": [
+        {
+            "files": ["*.ts"],
+            "rules": {
+                "no-undef": "off"
+            }
+        }
+    ]
 }
