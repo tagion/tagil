@@ -1,13 +1,12 @@
 import {Command, flags} from '@oclif/command';
-import {prompt} from 'enquirer';
-import chalk from 'chalk';
-import * as gradient from 'gradient-string';
-import * as figlet from 'figlet';
+import * as prompts from 'prompts';
 
 import {throwError, createFolder} from '../helpers';
-import {PromptMessages, UserMessages} from '../constants';
+import {PromptMessages} from '../constants';
 
-import Install from './install';
+import {Install} from './install';
+
+const chalk = require('chalk');
 
 export interface Question {
     type: string;
@@ -15,9 +14,7 @@ export interface Question {
     message?: string;
 }
 
-export default class Init extends Command {
-    laboratory: string | null = null;
-
+export class Init extends Command {
     static description = 'Command for laboratory initialization. Installing Maker and desirable Tagion modules.';
 
     static examples = ['$ tagil init -l=laba', '$ tagil init laba'];
@@ -35,45 +32,37 @@ export default class Init extends Command {
         laboratory: flags.string({char: 'l', description: PromptMessages.laboratoryArgDesc})
     };
 
-    async greetings() {
-        const title = figlet.textSync('Tagil', {
-            font: 'Graffiti',
-            horizontalLayout: 'full',
-            verticalLayout: 'full'
-        });
-
-        this.log(gradient('red', 'blue').multiline(title, {interpolation: 'hsv', hsvSpin: 'long'}));
-        this.log(chalk.cyan`-------------------------------------------------`);
-        this.log(chalk.bold(UserMessages.welcomeSubtitle));
-        this.log(chalk.cyan`-------------------------------------------------`);
-    }
-
-    private async initializeLaboratory() {
+    private async initializeLaboratory(predefinedLaboratory: string = '') {
         const question: any = {
-            type: 'input',
+            type: 'text',
             name: 'name',
             message: PromptMessages.pickLaboratoryName
         };
 
-        try {
-            if (!this.laboratory) {
-                const answer: {name: string} = await prompt(question);
+        let laboratory: string = predefinedLaboratory;
 
-                this.laboratory = answer.name;
+        try {
+            if (!laboratory) {
+                const response: {name: string} = await prompts(question);
+
+                laboratory = response.name;
             }
 
-            createFolder(this.laboratory);
+            this.log('laboratory name:');
+            this.log(laboratory);
 
-            this.log(`Go to ${chalk.cyanBright(this.laboratory)}`);
-            process.chdir(this.laboratory);
+            createFolder(laboratory);
 
-            await this.install();
+            this.log(`Going to ${chalk.cyanBright(laboratory)}`);
+            process.chdir(laboratory);
+
+            await this.installDependencies();
         } catch (error) {
             throwError(error);
         }
     }
 
-    private async install() {
+    private async installDependencies() {
         try {
             const installCommand = new Install(this.argv, this.config);
 
@@ -82,16 +71,16 @@ export default class Init extends Command {
 
             await installCommand.run();
         } catch (error) {
-            throwError(error);
+            this.error(error);
         }
     }
 
     async run() {
-        const {args} = this.parse(Init);
+        const {args, flags} = this.parse(Init),
+            laboratoryName = args.laboratory || flags.laboratory;
 
-        this.laboratory = args.laboratory;
+        await this.config.runHook('greetings', {withTitle: true});
 
-        this.greetings();
-        await this.initializeLaboratory();
+        await this.initializeLaboratory(laboratoryName);
     }
 }

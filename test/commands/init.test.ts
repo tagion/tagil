@@ -1,9 +1,24 @@
-import {expect, test} from '@oclif/test';
+import {expect, test, command} from '@oclif/test';
 
-describe('[init] command ', () => {
-    test.stdout()
+const fs = require('fs');
+const prompts = require('prompts');
+
+describe('[init] command', () => {
+    // .stub(prompts, '', () => async () => ({name: 'laba'}))
+    test
+        .stub(prompts, 'laboratory', () => ({name: 'laba'}))
+        .stdout({print: true, stripColor: false})
         .command(['init'])
-        .it('prints default greetings', ctx => {
-            expect(ctx.stdout).to.contain('Hello, World!');
+        .it('creating laboratory folder', async (ctx, done) => {
+            // expect(ctx.stdout).to.contain('Hello, World!');
+            process.chdir('..');
+            fs.rm('./laba', {recursive: true}, (error: any) => {
+                if (error) {
+                    console.log(error);
+                }
+
+                console.log('Testing folder deleted');
+                done();
+            });
         });
 });

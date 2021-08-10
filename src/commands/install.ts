@@ -1,19 +1,18 @@
 import {Command, flags} from '@oclif/command';
-import * as enquirer from 'enquirer';
+import * as prompts from 'prompts';
 import {exec} from 'child_process';
 import {Spinner} from 'clui';
 import chalk from 'chalk';
 
-import {ErrorMessages, GitRepos, PromptMessages, SPINNERS} from '../constants';
+import {ErrorMessages, GitRaw, PromptMessages, SPINNERS} from '../constants';
 
 import {writeMetaFileContent, isFileExist, throwError} from '../helpers';
 import git from '../services/git';
+import http from '../models/http';
 
 import MetaUpdate from './update';
 
-const {MultiSelect} = enquirer as any;
-
-export default class Install extends Command {
+export class Install extends Command {
     static description = 'Installing Tagion modules.';
 
     static examples = ['$ tagil install', '$ tagil install ./laba'];
@@ -25,13 +24,15 @@ export default class Install extends Command {
 
     static args = [{name: 'path', description: PromptMessages.installPathArgDesc, default: '.'}];
 
-    installMaker(path = '') {
+    async installMaker(path = '.') {
         const spinner = new Spinner('Installing maker', SPINNERS.dots12);
 
         spinner.start();
 
+        const {data} = await http.get(GitRaw.Tub);
+
         return new Promise(resolve => {
-            exec(`git clone ${GitRepos.Roots} . && make`, {cwd: path || './'}, (error, stdout: string) => {
+            exec(`${data}`, {cwd: path}, (error, stdout: string) => {
                 spinner.stop();
 
                 if (error) {
@@ -47,7 +48,7 @@ export default class Install extends Command {
         const {args, flags} = this.parse(Install);
         const spinner = new Spinner('Fetching Tagion library', SPINNERS.dots12);
 
-        if (!isFileExist('maker')) {
+        if (!isFileExist('tub')) {
             throwError(ErrorMessages.notInLaboratory);
         }
 
@@ -56,19 +57,21 @@ export default class Install extends Command {
             const library = await git.fetchTubLibrary();
             spinner.stop();
 
-            const normalizedLibrary = Object.entries(library).map(([name, value]) => ({name, value}));
-            const utilsPrompt = new MultiSelect({
+            const normalizedLibrary = Object.entries(library).map(([name, value]) => ({
+                title: name,
+                value: {name, link: value}
+            }));
+
+            const response = await prompts({
+                type: 'multiselect',
                 name: 'utils',
                 message: 'Pick Tagion utils to install (press space to select)',
-                choices: normalizedLibrary,
-                result(names: string[]) {
-                    return this.map(names);
-                }
+                choices: normalizedLibrary
             });
-            const answers = await utilsPrompt.run();
+
             const metaFileContent = {
-                projects: Object.entries(answers).reduce((prev: any, [name, value]) => {
-                    prev[`./src/${name}`] = value;
+                projects: Object.entries(response.utils).reduce((prev: any, [_index, {name, link}]: any) => {
+                    prev[`./src/${name}`] = link;
 
                     return prev;
                 }, {})
