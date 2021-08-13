@@ -6,7 +6,6 @@ const prompts = require('prompts');
 describe('[init] command', () => {
     // .stub(prompts, '', () => async () => ({name: 'laba'}))
     test
-        .stub(prompts, 'laboratory', () => ({name: 'laba'}))
         .stdout({print: true, stripColor: false})
         .command(['init'])
         .it('creating laboratory folder', async (ctx, done) => {

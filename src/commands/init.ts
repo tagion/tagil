@@ -1,5 +1,5 @@
 import {Command, flags} from '@oclif/command';
-import * as prompts from 'prompts';
+import {prompt} from 'enquirer';
 
 import {throwError, createFolder} from '../helpers';
 import {PromptMessages} from '../constants';
@@ -34,7 +34,7 @@ export class Init extends Command {
 
     private async initializeLaboratory(predefinedLaboratory: string = '') {
         const question: any = {
-            type: 'text',
+            type: 'input',
             name: 'name',
             message: PromptMessages.pickLaboratoryName
         };
@@ -43,13 +43,10 @@ export class Init extends Command {
 
         try {
             if (!laboratory) {
-                const response: {name: string} = await prompts(question);
+                const response: {name: string} = await prompt(question);
 
                 laboratory = response.name;
             }
-
-            this.log('laboratory name:');
-            this.log(laboratory);
 
             createFolder(laboratory);
 

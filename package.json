@@ -26,6 +26,7 @@
         "chai": "^4.3.4",
         "chalk": "^2.4.2",
         "clui": "^0.3.6",
+        "enquirer": "^2.3.6",
         "eslint": "^5.16.0",
         "eslint-config-oclif": "^3.1.0",
         "eslint-config-oclif-typescript": "^0.1.0",
@@ -34,7 +35,6 @@
         "gradient-string": "^1.2.0",
         "mocha": "^5.2.0",
         "nyc": "^14.1.1",
-        "prompts": "^2.4.1",
         "ts-node": "^8.10.2",
         "typescript": "^3.9.10"
     },
