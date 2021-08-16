@@ -80,7 +80,7 @@ export class Install extends Command {
                 }, {})
             };
 
-            writeMetaFileContent(JSON.stringify(metaFileContent));
+            await writeMetaFileContent(JSON.stringify(metaFileContent));
         } catch (error) {
             throwError(error);
         }
