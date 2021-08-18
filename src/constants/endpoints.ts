@@ -3,7 +3,7 @@ export enum GitApi {
 }
 
 export enum GitRaw {
-    Tub = 'https://raw.githubusercontent.com/tagion/tub/master/scripts/install.sh'
+    Tub = 'https://raw.githubusercontent.com/tagion/tub/master/install'
 }
 
 export enum GitRepos {

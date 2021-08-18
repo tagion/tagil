@@ -8,7 +8,10 @@
         "semi": 0,
         "indent": 0,
         "comma-dangle": 0,
-        "no-console": 0
+        "no-console": 0,
+        "@typescript-eslint/no-inferrable-types": 0,
+        "one-var": 0,
+        "unicorn/no-hex-escape": 0
     },
     "overrides": [
         {

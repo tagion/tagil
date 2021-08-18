@@ -1,37 +1,21 @@
-import {expect, test, command} from '@oclif/test';
+import {expect, test} from '@oclif/test';
 import * as enquirer from 'enquirer';
 
-import {CONTROLS} from '../../src/constants';
+import {DEFAULT_LABORATORY_NAME, CONTROLS} from '../constants';
+import {removeTestingFolder} from '../helpers';
 
 const fs = require('fs');
 const figlet = require('figlet');
-const chalk = require('chalk');
 
 const wait = (ms = 10) => new Promise(resolve => setTimeout(resolve, ms));
-const defaultLaboratoryName = 'laba';
-
-const removeTestingFolder = (path: string, cb: () => void) => {
-    if (!fs.existsSync(path)) {
-        throw new Error('❌ Folder not founded!');
-    }
-
-    fs.rm(path, {recursive: true}, (error: any) => {
-        if (error) {
-            console.log(error);
-        }
-
-        console.log(chalk.green`✅ Testing folder deleted!`);
-        cb();
-    });
-};
 
 describe('Command [init]', () => {
     test.timeout(13000)
-        .stub(enquirer, `prompt`, () => async () => ({name: defaultLaboratoryName}))
-        .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 5000)
-        .stdout({print: true, stripColor: true})
+        .stub(enquirer, 'prompt', () => async () => ({name: DEFAULT_LABORATORY_NAME}))
+        .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 5000) // MultiSelect prompt ([install] command) selecting modules mocking
+        .stdout({print: false, stripColor: true})
         .command(['init'])
-        .it('greeeting, creating laboratory folder and updating dependencies', async (ctx, done) => {
+        .it('greeting, creating laboratory folder and updating dependencies', async (ctx, done) => {
             const title = figlet.textSync('Tagil', {
                 font: 'Graffiti',
                 horizontalLayout: 'full',
@@ -39,27 +23,27 @@ describe('Command [init]', () => {
             });
 
             expect(ctx.stdout).to.contain(title);
-            expect(fs.existsSync(`../${defaultLaboratoryName}`)).to.be.equal(true);
-            expect(ctx.stdout).to.contain(`✅ ${defaultLaboratoryName} created!`);
+            expect(fs.existsSync(DEFAULT_LABORATORY_NAME)).to.be.equal(true);
+            expect(ctx.stdout).to.contain(`✅ ${DEFAULT_LABORATORY_NAME} created!`);
 
             await wait(1000);
-            expect(fs.existsSync(`.meta`)).to.be.equal(true);
-            expect(ctx.stdout).to.contain(`✅ .meta file updated!`);
+            expect(fs.existsSync(`${DEFAULT_LABORATORY_NAME}/.meta`)).to.be.equal(true);
+            expect(ctx.stdout).to.contain('✅ .meta file updated!');
 
             await wait(1000);
-            expect(ctx.stdout).to.contain(`✅ Tagion modules updated!`);
+            expect(ctx.stdout).to.contain('✅ Tagion modules updated!');
 
-            done();
+            await removeTestingFolder(DEFAULT_LABORATORY_NAME, () => done());
         });
 
     test.timeout(10000)
-        .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 4000)
-        .stdout({print: true, stripColor: true})
-        .command(['init', defaultLaboratoryName])
-        .it(`creates laboratory by predefined name [${defaultLaboratoryName}]`, (ctx, done) => {
-            expect(fs.existsSync(`../${defaultLaboratoryName}`)).to.be.equal(true);
-            expect(ctx.stdout).to.contain(`✅ ${defaultLaboratoryName} created!`);
+        .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 4000) // MultiSelect prompt ([install] command) selecting modules mocking
+        .stdout({print: false, stripColor: true})
+        .command(['init', DEFAULT_LABORATORY_NAME])
+        .it(`creates laboratory by predefined name [${DEFAULT_LABORATORY_NAME}]`, async (ctx, done) => {
+            expect(fs.existsSync(DEFAULT_LABORATORY_NAME)).to.be.equal(true);
+            expect(ctx.stdout).to.contain(`✅ ${DEFAULT_LABORATORY_NAME} created!`);
 
-            removeTestingFolder(`../${defaultLaboratoryName}`, () => done());
+            await removeTestingFolder(DEFAULT_LABORATORY_NAME, () => done());
         });
 });

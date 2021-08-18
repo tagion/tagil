@@ -1,7 +1,9 @@
-import chalk from 'chalk'
+export const throwError = (error: string | object) => {
+    if (typeof error === 'string') {
+        throw new TypeError(error);
+    } else {
+        console.error(error);
+    }
+};
 
-export const throwError = (error: string) => {
-  throw new Error(chalk.red(error))
-}
-
-export * from './fs'
+export * from './fs';

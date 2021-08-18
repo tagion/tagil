@@ -1,7 +1,6 @@
 import {Command, flags} from '@oclif/command';
 import {exec} from 'child_process';
 import chalk from 'chalk';
-import * as path from 'path';
 import {Spinner} from 'clui';
 
 import {PromptMessages, ErrorMessages, SPINNERS} from '../constants';
@@ -38,11 +37,11 @@ export default class MetaUpdate extends Command {
     }
 
     async run() {
-        const {args, flags} = this.parse(MetaUpdate);
-        const cwdPath = args.path || flags.path;
+        // const {args, flags} = this.parse(MetaUpdate);
+        // const cwdPath = args.path || flags.path;
 
         if (!isFileExist('.meta')) {
-            throwError(ErrorMessages.notInLaboratory);
+            throwError(ErrorMessages.meta404);
         }
 
         await this.updateExec();

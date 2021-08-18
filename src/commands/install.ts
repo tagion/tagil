@@ -2,7 +2,6 @@ import {Command, flags} from '@oclif/command';
 import * as enquirer from 'enquirer';
 import {exec} from 'child_process';
 import {Spinner} from 'clui';
-import chalk from 'chalk';
 
 import {ErrorMessages, GitRaw, PromptMessages, SPINNERS} from '../constants';
 
@@ -31,23 +30,27 @@ export class Install extends Command {
 
         spinner.start();
 
-        const {data} = await http.get(GitRaw.Tub);
+        try {
+            const {data} = await http.get(GitRaw.Tub);
 
-        return new Promise(resolve => {
-            exec(`${data}`, {cwd: path}, (error, stdout: string) => {
-                spinner.stop();
+            return new Promise(resolve => {
+                exec(`${data}`, {cwd: path}, (error, stdout: string) => {
+                    spinner.stop();
 
-                if (error) {
-                    throwError(`Install error:\n ${error}`);
-                }
+                    if (error) {
+                        throwError(`Install error:\n ${error}`);
+                    }
 
-                resolve(chalk.cyan(stdout));
+                    resolve(stdout);
+                });
             });
-        });
+        } catch (error) {
+            throwError(error);
+        }
     }
 
     async run() {
-        const {args, flags} = this.parse(Install);
+        // const {args, flags} = this.parse(Install); to-do: use args/flags to switch feature
         const spinner = new Spinner('Fetching Tagion library', SPINNERS.dots12);
 
         if (!isFileExist('tub')) {

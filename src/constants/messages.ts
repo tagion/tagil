@@ -1,5 +1,6 @@
 export enum ErrorMessages {
-    notInLaboratory = 'I have bad feelings about this... Looks like you are trying install packages outside of your laboratory. Please, try {init} command.'
+    notInLaboratory = 'I have bad feelings about this... Looks like you are trying install packages outside of your laboratory. Please, try {init} command.',
+    meta404 = 'I have bad feelings about this... .meta file not found 😰'
 }
 
 export enum UserMessages {

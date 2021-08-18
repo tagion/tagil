@@ -63,12 +63,5 @@ export const SPINNERS = {
     moon: ['🌑 ', '🌒 ', '🌓 ', '🌔 ', '🌕 ', '🌖 ', '🌗 ', '🌘 ']
 };
 
-export enum CONTROLS {
-    Up = '\x1B\x5B\x41',
-    Down = '\x1B\x5B\x42',
-    Enter = '\x0D',
-    Space = '\x20'
-}
-
 export * from './messages';
 export * from './endpoints';
