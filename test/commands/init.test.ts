@@ -13,7 +13,7 @@ describe('Command [init]', () => {
     test.timeout(13000)
         .stub(enquirer, 'prompt', () => async () => ({name: DEFAULT_LABORATORY_NAME}))
         .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 5000) // MultiSelect prompt ([install] command) selecting modules mocking
-        .stdout({print: false, stripColor: true})
+        .stdout({print: true, stripColor: true})
         .command(['init'])
         .it('greeting, creating laboratory folder and updating dependencies', async (ctx, done) => {
             const title = figlet.textSync('Tagil', {

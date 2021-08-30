@@ -2,6 +2,7 @@ import {Command, flags} from '@oclif/command';
 import {exec} from 'child_process';
 import chalk from 'chalk';
 import {Spinner} from 'clui';
+import * as fs from 'fs';
 
 import {PromptMessages, ErrorMessages, SPINNERS} from '../constants';
 

@@ -54,7 +54,7 @@ export class Init extends Command {
             process.chdir(laboratory);
 
             await this.installDependencies();
-            process.chdir('../');
+            process.chdir('..');
         } catch (error) {
             throwError(error);
         }

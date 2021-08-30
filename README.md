@@ -29,9 +29,10 @@ USAGE
 # Commands
 <!-- commands -->
 * [`tagil help [COMMAND]`](#tagil-help-command)
-* [`tagil init [LABNAME]`](#tagil-init-labname)
-* [`tagil install [FILE]`](#tagil-install-file)
-* [`tagil update`](#tagil-update)
+* [`tagil init [LABORATORY]`](#tagil-init-laboratory)
+* [`tagil install [PATH]`](#tagil-install-path)
+* [`tagil update [PATH]`](#tagil-update-path)
+* [`tagil watch [FILE]`](#tagil-watch-file)
 
 ## `tagil help [COMMAND]`
 
@@ -50,31 +51,79 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.2/src/commands/help.ts)_
 
-## `tagil init [LABNAME]`
+## `tagil init [LABORATORY]`
 
-Init command
+Command for laboratory initialization. Installing Maker and desirable Tagion modules.
 
 ```
 USAGE
-  $ tagil init [LABNAME]
+  $ tagil init [LABORATORY]
 
 ARGUMENTS
-  LABNAME  Tagion laboratory folder name
+  LABORATORY  Tagion laboratory folder name
 
-EXAMPLE
-  $ tagil init -n=[lab-name]
-           Initialization 🍊🍊🍊
+OPTIONS
+  -h, --help                   show CLI help
+  -l, --laboratory=laboratory  Tagion laboratory folder name
+
+EXAMPLES
+  $ tagil init -l=laba
+  $ tagil init laba
 ```
 
 _See code: [src/commands/init.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/init.ts)_
 
-## `tagil install [FILE]`
+## `tagil install [PATH]`
+
+Installing Tagion modules.
+
+```
+USAGE
+  $ tagil install [PATH]
+
+ARGUMENTS
+  PATH  [default: .] Path for installing modules
+
+OPTIONS
+  -h, --help       show CLI help
+  -p, --path=path  [default: .] Path for installing modules
+
+EXAMPLES
+  $ tagil install
+  $ tagil install ./laba
+```
+
+_See code: [src/commands/install.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/install.ts)_
+
+## `tagil update [PATH]`
+
+Updating laboratory modules.
+
+```
+USAGE
+  $ tagil update [PATH]
+
+ARGUMENTS
+  PATH  [default: .] Path for updating modules
+
+OPTIONS
+  -h, --help       show CLI help
+  -p, --path=path  [default: .] Path for updating modules
+
+EXAMPLES
+  $ tagil update
+  $ tagil update ./laba
+```
+
+_See code: [src/commands/update.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/update.ts)_
+
+## `tagil watch [FILE]`
 
 describe the command here
 
 ```
 USAGE
-  $ tagil install [FILE]
+  $ tagil watch [FILE]
 
 OPTIONS
   -f, --force
@@ -82,16 +131,5 @@ OPTIONS
   -n, --name=name  name to print
 ```
 
-_See code: [src/commands/install.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/install.ts)_
-
-## `tagil update`
-
-Installing Tagion dependencies.
-
-```
-USAGE
-  $ tagil update
-```
-
-_See code: [src/commands/update.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/update.ts)_
+_See code: [src/commands/watch.ts](https://github.com/tini2n/tagil/blob/v0.0.0/src/commands/watch.ts)_
 <!-- commandsstop -->

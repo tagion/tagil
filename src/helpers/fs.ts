@@ -1,6 +1,10 @@
 import * as fs from 'fs';
 import chalk from 'chalk';
 
+interface ReaddirOptions {
+    encoding?: string | null;
+}
+
 export const createFolder = (name: string) => {
     if (fs.existsSync(name)) {
         throw new Error('❌ Folder already exist');
@@ -23,3 +27,15 @@ export const writeMetaFileContent = async (content = '') => {
         console.log(chalk.cyanBright`✅ .meta file updated!`);
     });
 };
+
+export const readDirPromise = (path = '.', options: ReaddirOptions = {encoding: 'utf8'}, cb?: () => void) =>
+    new Promise((resolve, reject) => {
+        fs.readdir(path, {...options, withFileTypes: true}, (error: any, files: fs.Dirent[]) => {
+            if (error) {
+                reject(error);
+            }
+
+            cb && cb();
+            resolve(files);
+        });
+    });

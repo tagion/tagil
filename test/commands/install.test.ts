@@ -11,7 +11,7 @@ describe('Command [install]', () => {
             process.chdir(DEFAULT_LABORATORY_NAME);
         })
         .stdin(`${CONTROLS.Space}${CONTROLS.Down}${CONTROLS.Space}${CONTROLS.Enter}`, 1000) // MultiSelect prompt ([install] command) selecting modules mocking
-        .stdout({print: false, stripColor: true})
+        .stdout({print: true, stripColor: true})
         .command(['install'])
         .it('installing tagion dependencies', async (ctx, done) => {
             expect(ctx.stdout).to.contain('Pick Tagion utils to install (press space to select)');
